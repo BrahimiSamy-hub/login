@@ -1,23 +1,33 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react"
+import axios from "axios"
 
-const url = 'https://icanhazdadjoke.com/';
+const url = "https://dog.ceo/api/breed/hound/images"
 // Accept : 'application/json'
 
 const Headers = () => {
-  const [joke, setJoke] = useState('random dad joke');
+  const [message, setDogImg] = useState([0])
 
   const fetchDadJoke = async () => {
-    console.log('fetch dad joke');
-  };
+    try {
+      const { data } = await axios(url, {
+        headers: {
+          Accept: "application/json",
+        },
+      })
+      console.log(data.message)
+      setDogImg(data.message)
+    } catch (error) {
+      console.log(error.response)
+    }
+  }
 
   return (
     <section className='section text-center'>
+      <img src={message} alt='' className='img' />
       <button className='btn' onClick={fetchDadJoke}>
-        random joke
+        random dog
       </button>
-      <p className='dad-joke'>{joke}</p>
     </section>
-  );
-};
-export default Headers;
+  )
+}
+export default Headers

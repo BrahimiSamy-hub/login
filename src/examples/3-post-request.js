@@ -1,32 +1,32 @@
-import { useState } from 'react';
-import axios from 'axios';
-const url = 'https://course-api.com/axios-tutorial-post';
+import { useState } from "react"
+import axios from "axios"
+const url = "http://localhost:2000/api/v1/users/register"
 
 const PostRequest = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setName] = useState("")
+  const [password, setEmail] = useState("")
+  const [response, setResponse] = useState("")
+  const [confirm, setConfirm] = useState("")
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(name, email);
-  };
+    if (password !== confirm) {
+      setResponse("erreur")
+    } else {
+      e.preventDefault()
+      try {
+        const resp = await axios.post(url, { email, password })
+        console.log(resp.data)
+        setResponse(resp.data)
+      } catch (error) {
+        setResponse(error.response.data)
+      }
+    }
+  }
 
   return (
     <section>
-      <h2 className='text-center'>post request</h2>
-      <form className='form' onSubmit={handleSubmit}>
-        <div className='form-row'>
-          <label htmlFor='name' className='form-label'>
-            name
-          </label>
-          <input
-            type='text'
-            className='form-input'
-            id='name'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+      <h2 className='text-center'>{response}</h2>
+      <form className='form'>
         <div className='form-row'>
           <label htmlFor='email' className='form-label'>
             email
@@ -36,14 +36,41 @@ const PostRequest = () => {
             className='form-input'
             id='email'
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
+            required
           />
         </div>
-        <button type='submit' className='btn btn-block'>
+        <div className='form-row'>
+          <label htmlFor='password' className='form-label'>
+            Password
+          </label>
+          <input
+            type='password'
+            className='form-input'
+            id='password'
+            value={password}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className='form-row'>
+          <label htmlFor='Confirmpassword' className='form-label'>
+            Confirm
+          </label>
+          <input
+            type='password'
+            className='form-input'
+            id='Confirmpassword'
+            value={confirm}
+            onChange={(e) => setConfirm(e.target.value)}
+            required
+          />
+        </div>
+        <button type='button' className='btn btn-block' onClick={handleSubmit}>
           login
         </button>
       </form>
     </section>
-  );
-};
-export default PostRequest;
+  )
+}
+export default PostRequest
